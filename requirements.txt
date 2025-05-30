@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+pandas
+numpy
+joblib
+openpyxl
+sentence-transformers
+faiss-cpu
+requests
+scikit-learn
