@@ -11,7 +11,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 router = APIRouter()
 
-# Load datasets
 df_stunting = pd.read_csv("data/stunting_dataset.csv")
 df_stunting['text'] = df_stunting['text'].astype(str)
 
@@ -21,26 +20,21 @@ df_mpasi['text'] = df_mpasi.apply(
     axis=1
 )
 
-# Load embedding model
 embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-# FAISS index untuk stunting
 stunting_embeddings = embedding_model.encode(df_stunting['text'].tolist(), convert_to_numpy=True)
 stunting_embeddings = np.array(stunting_embeddings).astype('float32')
 index_stunting = faiss.IndexFlatL2(stunting_embeddings.shape[1])
 index_stunting.add(stunting_embeddings)
 
-# Embedding MPASI
 mpasi_embeddings = embedding_model.encode(df_mpasi['text'].tolist(), convert_to_numpy=True)
 df_mpasi['embedding'] = list(mpasi_embeddings.astype('float32'))
 
-# Pydantic Model
 class MPASIQuestion(BaseModel):
     question: str
     usia_bulan: int = None
     user_id: int
 
-# Ekstrak usia dari teks
 def extract_usia_from_text(text):
     match = re.search(r"(\d+)\s*bulan", text.lower())
     if match:
@@ -49,19 +43,16 @@ def extract_usia_from_text(text):
         return int(text.strip())
     return None
 
-# Batasi panjang context
 def truncate_text(text, max_words=80):
     return ' '.join(text.split()[:max_words])
 
-# Koneksi ke database
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="admin123$",
+        host="103.52.114.227",
+        user="adminbabu",
+        password="Adminbabu123$",
         database="laravel"
     )
-
 def save_qa_to_db(pertanyaan, jawaban, status):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -80,7 +71,6 @@ def save_unanswered_to_chat(pertanyaan, user_id):
     cursor.close()
     conn.close()
 
-# Deteksi relevansi pertanyaan
 def is_relevant_to_stunting(text, threshold=0.3):
     keywords = [
         "stunting", "gizi", "pertumbuhan", "berat badan", "tumbuh kembang",
