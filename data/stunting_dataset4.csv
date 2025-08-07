@@ -32,4 +32,14 @@ id,kategori,text
 31,Tentang Website,StuntAIDS (Stunting Artificial Intelligence Development System) adalah website yang bertujuan menangani stunting dan mengurangi angka anak-anak yang terkena stunting melalui teknologi kecerdasan buatan.
 32,Fitur Website,"StuntAIDS memiliki fitur-fitur utama seperti: membuat appointment dengan dokter, chatbot, deteksi stunting, rekomendasi MPASI, dan pencarian puskesmas terdekat."
 33,Cara Appointment,"Untuk membuat appointment dengan dokter, pengguna dapat mengklik menu 'Appointment' di bagian atas website dan mengisi formulir. Setelah itu, pengguna akan mendapatkan kartu antrian digital."
-
+34,Chatbot,"Chatbot StuntAIDS dapat membantu menjawab pertanyaan seputar stunting dan terkait website kami. Pengguna dapat mengaksesnya melalui menu 'Chatbot' di website."
+35,Deteksi Stunting,"Fitur deteksi stunting memungkinkan pengguna untuk menjawab pertanyaan dan mendapatkan analisis apakah anak tersebut berisiko stunting atau tidak."
+36,Rekomendasi MPASI,"Fitur rekomendasi MPASI memberikan saran makanan pendamping ASI yang sesuai dengan usia dan kondisi anak."
+38,Kondisi Stunting di Indonesia 2024,"Hasil Survei Status Gizi Indonesia (SSGI) 2024 menunjukkan prevalensi stunting di Indonesia turun menjadi 19,8%."
+39,Dampak Jangka Panjang,"Anak stunting lebih berisiko mengalami gangguan metabolik dan kesehatan mental saat dewasa."
+40,Halo, ada yang bisa saya bantu terkait stunting atau MPASI?
+41,Assalamu'alaikum, saya siap membantu pertanyaan seputar gizi anak dan MPASI.
+42,Selamat pagi! Silakan ajukan pertanyaan Anda tentang stunting atau MPASI.
+43,Selamat siang! Saya siap membantu menjawab pertanyaan seputar tumbuh kembang anak.
+44,Selamat sore, bagaimana saya bisa membantu Anda hari ini?
+45,Selamat malam, apakah ada yang ingin ditanyakan terkait MPASI atau stunting?
