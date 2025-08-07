@@ -5,12 +5,7 @@ import faiss
 import re
 import requests
 import numpy as np
-import re
-import requests
-import numpy as np
 from sentence_transformers import SentenceTransformer
-import mysql.connector
-from sklearn.metrics.pairwise import cosine_similarity
 import mysql.connector
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -32,15 +27,6 @@ stunting_embeddings = np.array(stunting_embeddings).astype('float32')
 index_stunting = faiss.IndexFlatL2(stunting_embeddings.shape[1])
 index_stunting.add(stunting_embeddings)
 
-stunting_embeddings = embedding_model.encode(df_stunting['text'].tolist(), convert_to_numpy=True)
-stunting_embeddings = np.array(stunting_embeddings).astype('float32')
-index_stunting = faiss.IndexFlatL2(stunting_embeddings.shape[1])
-index_stunting.add(stunting_embeddings)
-
-mpasi_embeddings = embedding_model.encode(df_mpasi['text'].tolist(), convert_to_numpy=True)
-df_mpasi['embedding'] = list(mpasi_embeddings.astype('float32'))
-
-class MPASIQuestion(BaseModel):
 mpasi_embeddings = embedding_model.encode(df_mpasi['text'].tolist(), convert_to_numpy=True)
 df_mpasi['embedding'] = list(mpasi_embeddings.astype('float32'))
 
@@ -91,7 +77,7 @@ def is_relevant_to_stunting(text, threshold=0.3):
         "stunting", "gizi", "pertumbuhan", "berat badan", "tumbuh kembang",
         "tinggi badan", "balita", "bayi", "mpasi", "makanan pendamping asi",
         "pencegahan", "nutrisi", "asi", "makanan sehat", "kekurangan gizi",
-        "website stuntaids", "stuntaids", "website ini", "hai", "halo", "assalamu", "hello", "apa kabar", "selamat pagi", "selamat siang", "selamat malam"
+        "website stuntaid", "stuntaid", "website ini", "hai", "halo", "assalamu", "hello", "apa kabar", "selamat pagi", "selamat siang", "selamat malam"
     ]
     if any(kw in text.lower() for kw in keywords):
         return True
@@ -120,18 +106,10 @@ def generate_answer_stunting(question, user_id, threshold=2.5):
     context = "\n".join(truncate_text(df_stunting.iloc[idx]['text']) for idx in indices[0])
     prompt = f"""
 Kamu adalah asisten ahli stunting. Jawablah pertanyaan berikut secara singkat, jelas, dan akurat.
-Kamu adalah asisten ahli stunting. Jawablah pertanyaan berikut secara singkat, jelas, dan akurat.
 
 === Informasi ===
 {context}
-=== Informasi ===
-{context}
 
-=== Pertanyaan ===
-{question}
-
-=== Jawaban ===
-"""
 === Pertanyaan ===
 {question}
 
@@ -162,6 +140,9 @@ def generate_answer_mpasi(question, usia_bulan, user_id=None, threshold=2.5):
 
     query_vector = embedding_model.encode([question]).astype('float32')
     distances, indices = index_filtered.search(query_vector, 1)
+
+    print(f"[DEBUG] Pertanyaan MPASI: {question}")
+    print(f"[DEBUG] Jarak hasil MPASI: {distances[0][0]}")
 
     if distances[0][0] > threshold:
         return f"Maaf, saya tidak menemukan rekomendasi MPASI yang sesuai untuk pertanyaan tersebut.", "belum ada rekomendasi"
@@ -201,9 +182,6 @@ def generate_answer_with_age(question, usia_bulan=None, user_id=None):
     return generate_answer_stunting(question, user_id)
 
 @router.post("/ask")
-def mpasi(q: MPASIQuestion):
-    jawaban, status = generate_answer_with_age(q.question, q.usia_bulan, q.user_id)
-    return {"jawaban": jawaban, "status": status}
 def mpasi(q: MPASIQuestion):
     jawaban, status = generate_answer_with_age(q.question, q.usia_bulan, q.user_id)
     return {"jawaban": jawaban, "status": status}
